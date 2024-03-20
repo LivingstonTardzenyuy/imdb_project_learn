@@ -19,5 +19,5 @@ def movie_detail(request, pk):
         'description': movie.description,
         'active': movie.active 
     }
-    return JsonResponse(data)
-    # print(movie      
+    return JsonResponse(data) 
+
