@@ -16,10 +16,23 @@ def movie_list(request):
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(serializer.errors)       
-@api_view(["GET",])
+            return Response(serializer.errors)     
+        
+          
+@api_view(["GET", "PUT", "DELETE",])
 def movie_details(request, pk):
-    movie = Movie.objects.get(pk=pk)
-    serializer = MovieSerializers(movie)
-    return Response(serializer.data)
-
+    if request.method == "GET":
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieSerializers(movie)
+        return Response(serializer.data)
+    
+    if request.method == "PUT":
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieSerializers(movie, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+        
+    # if request.method == "DELETE": 
