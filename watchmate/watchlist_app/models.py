@@ -10,3 +10,11 @@ class Movie(models.Model):
     def __str__(self):
         return self.name
     
+    
+class StreamPlatForm(models.Model):
+    name = models.CharField(max_length = 50)
+    about = models.TextField()
+    website = models.CharField(max_length = 50)
+    
+    def __str__(self):
+        return self.name
