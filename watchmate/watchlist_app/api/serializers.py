@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from watchlist_app.models import Movie, StreamPlatForm
+from watchlist_app.models import WatchList, StreamPlatForm
 
 
-class MovieSerializer(serializers.ModelSerializer):
+class WatchListSerializer(serializers.ModelSerializer):
     len_names = serializers.SerializerMethodField()  #adding a new field without specifying in models.
     class Meta:
-        model = Movie 
+        model = WatchList 
         fields = '__all__'
 
 
