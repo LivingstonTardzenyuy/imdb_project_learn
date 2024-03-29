@@ -1,12 +1,16 @@
 from watchlist_app.models import WatchList, StreamPlatForm
-from watchlist_app.api.serializers import WatchListSerializer, StreamPlatFormSerializer 
+from watchlist_app.api.serializers import WatchListSerializer, StreamPlatFormSerializer, ReviewsSerializer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
 from rest_framework import status 
 
 
 from rest_framework.views import APIView 
+from rest_framework import generics
 
+class ReviewsGV(generics.ListCreateAPIView):
+    queryset = Reviews.objects.all()
+    serializer_class = ReviewsSerializer
 class StreamPlatFormAV(APIView):
     def get(self, request):
         streamPlatForm = StreamPlatForm.objects.all()
