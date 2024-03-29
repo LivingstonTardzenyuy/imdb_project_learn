@@ -2,6 +2,19 @@ from rest_framework import serializers
 from watchlist_app.models import WatchList, StreamPlatForm
 
 
+
+       
+class StreamPlatFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StreamPlatForm
+        fields = "__all__"
+        
+        def validate(self, data):
+            if data['name'] == data['about']:
+                raise serializers.ValidationError("Both fields should be different")
+            else:
+                return data 
+
 class WatchListSerializer(serializers.ModelSerializer):
     len_names = serializers.SerializerMethodField()  #adding a new field without specifying in models.
     class Meta:
@@ -20,14 +33,4 @@ class WatchListSerializer(serializers.ModelSerializer):
         else:
             return data 
         
-        
-class StreamPlatFormSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StreamPlatForm
-        fields = "__all__"
-        
-        def validate(self, data):
-            if data['name'] == data['about']:
-                raise serializers.ValidationError("Both fields should be different")
-            else:
-                return data 
+ 

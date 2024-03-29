@@ -24,7 +24,7 @@ class StreamPlatFormAV(APIView):
 class StreamPlatFormDetailsAV(APIView):
     def get(self, request, pk):
         try:
-            streamPlatForm = StreamPlatForm.objects.get(pk = pk)
+            streamPlatForm = StreamPlatForm.objects.get(pk=pk)
         except StreamPlatForm.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
         
