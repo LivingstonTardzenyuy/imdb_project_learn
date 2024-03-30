@@ -13,6 +13,4 @@ urlpatterns = [
     path('stream/<int:pk>/review', ReviewList.as_view(), name = 'review-list'),
     path('stream/review/<int:pk>', ReviewDetails.as_view(), name = 'review-reviews')
     
-    # path('reviews', ReviewList.as_view(), name = 'review-list'),  
-    # path('reviews/<int:pk>', ReviewDetails.as_view(), name = 'retrieve-reviews')
 ]

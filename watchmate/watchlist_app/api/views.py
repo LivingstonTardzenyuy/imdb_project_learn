@@ -18,24 +18,6 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
-# class ReviewList(
-#             mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
-#         ):
-#     queryset = Reviews.objects.all()
-#     serializer_class = ReviewsSerializer
-      
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-    
-# class ReviewDetails(mixins.RetrieveModelMixin, generics.GenericAPIView):
-#     queryset = Reviews.objects.all()
-#     serializer_class = ReviewsSerializer
-    
-#     def get(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-    
 class StreamPlatFormAV(APIView):
     def get(self, request):
         streamPlatForm = StreamPlatForm.objects.all()
