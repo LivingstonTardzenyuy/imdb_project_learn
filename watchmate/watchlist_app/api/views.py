@@ -11,8 +11,12 @@ from rest_framework import mixins
 
 
 class ReviewList(generics.ListCreateAPIView):
-    queryset = Reviews.objects.all()
+    # queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
+    
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
