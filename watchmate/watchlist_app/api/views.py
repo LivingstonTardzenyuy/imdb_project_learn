@@ -3,11 +3,11 @@ from watchlist_app.api.serializers import WatchListSerializer, StreamPlatFormSer
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view
 from rest_framework import status 
-
-
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins 
+from rest_framework import viewsets
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
@@ -28,20 +28,34 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
-    
-class StreamPlatFormAV(APIView):
+
+
+class StreamPlatForm(viewsets.ViewSet):
     def get(self, request):
-        streamPlatForm = StreamPlatForm.objects.all()
-        serializer = StreamPlatFormSerializer(streamPlatForm, many = True)
+        queryset = StreamPlatForm.objects.all()
+        serializer = StreamPlatFormSerializer(queryset, many = True)
         return Response(serializer.data)
     
-    def post(self, request):
-        serializer = StreamPlatFormSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status = status.HTTP_201_CREATED)
-        else:
-            return Response(status = status.HTTP_400_BAD_REQUEST)   
+    def retrieve(self, request, pk=None):
+        queryset = StreamPlatForm.objects.all()
+        watchlist = get_object_or_404(queryset, pk=pk)
+        serializer = StreamPlatFormSerializer(watchlist)
+        return Response(serializer.data)
+        
+    
+# class StreamPlatFormAV(APIView):
+#     def get(self, request):
+#         streamPlatForm = StreamPlatForm.objects.all()
+#         serializer = StreamPlatFormSerializer(streamPlatForm, many = True)
+#         return Response(serializer.data)
+    
+#     def post(self, request):
+#         serializer = StreamPlatFormSerializer(data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(status = status.HTTP_201_CREATED)
+#         else:
+#             return Response(status = status.HTTP_400_BAD_REQUEST)   
        
 class StreamPlatFormDetailsAV(APIView):
     def get(self, request, pk):
