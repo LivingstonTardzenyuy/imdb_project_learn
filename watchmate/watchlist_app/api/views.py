@@ -5,12 +5,18 @@ from rest_framework.decorators import api_view
 from rest_framework import status 
 
 
-from rest_framework.views import APIView 
+from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins 
 
-
-class ReviewList(generics.ListCreateAPIView):
+class ReviewCreate(generics.CreateAPIView):
+    serializer_class = ReviewsSerializer
+    def perform_create(self, serializer):
+        pk = self.kwargs.get('pk')
+        movie = WatchList.objects.get(pk=pk)
+        serializer.save(watchlist = movie)
+        
+class ReviewList(generics.ListAPIView):
     # queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
@@ -21,6 +27,7 @@ class ReviewList(generics.ListCreateAPIView):
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
+    
     
 class StreamPlatFormAV(APIView):
     def get(self, request):
