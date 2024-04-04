@@ -30,8 +30,8 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     
 
 
-class StreamPlatForm(viewsets.ViewSet):
-    def get(self, request):
+class StreamPlatFormAV(viewsets.ViewSet):
+    def list(self, request):
         queryset = StreamPlatForm.objects.all()
         serializer = StreamPlatFormSerializer(queryset, many = True)
         return Response(serializer.data)

@@ -1,11 +1,11 @@
 from django.urls import path , include
 from watchlist_app.api.views import (
-    WatchListListAV, WatchListDetailsAV, StreamPlatForm,
+    WatchListListAV, WatchListDetailsAV, StreamPlatFormAV,
     ReviewList, ReviewDetails, ReviewCreate)
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('stream', StreamPlatForm, basename="streamplatform")
+router.register('stream', StreamPlatFormAV, basename="streamplatform")
 
 
 urlpatterns = [
