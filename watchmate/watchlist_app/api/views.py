@@ -41,22 +41,7 @@ class StreamPlatFormAV(viewsets.ViewSet):
         watchlist = get_object_or_404(queryset, pk=pk)
         serializer = StreamPlatFormSerializer(watchlist)
         return Response(serializer.data)
-        
-    
-# class StreamPlatFormAV(APIView):
-#     def get(self, request):
-#         streamPlatForm = StreamPlatForm.objects.all()
-#         serializer = StreamPlatFormSerializer(streamPlatForm, many = True)
-#         return Response(serializer.data)
-    
-#     def post(self, request):
-#         serializer = StreamPlatFormSerializer(data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(status = status.HTTP_201_CREATED)
-#         else:
-#             return Response(status = status.HTTP_400_BAD_REQUEST)   
-       
+
 class StreamPlatFormDetailsAV(APIView):
     def get(self, request, pk):
         try:
