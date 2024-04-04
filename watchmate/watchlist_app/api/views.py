@@ -8,6 +8,8 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins 
 from rest_framework import viewsets
+from django.views.decorators.csrf import csrf_exempt
+
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
@@ -30,17 +32,38 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     
 
 
-class StreamPlatFormAV(viewsets.ViewSet):
-    def list(self, request):
-        queryset = StreamPlatForm.objects.all()
-        serializer = StreamPlatFormSerializer(queryset, many = True)
-        return Response(serializer.data)
+# class StreamPlatFormAV(viewsets.ViewSet):
+#     def list(self, request):
+#         queryset = StreamPlatForm.objects.all()
+#         serializer = StreamPlatFormSerializer(queryset, many = True)
+#         return Response(serializer.data)
     
-    def retrieve(self, request, pk=None):
-        queryset = StreamPlatForm.objects.all()
-        watchlist = get_object_or_404(queryset, pk=pk)
-        serializer = StreamPlatFormSerializer(watchlist)
-        return Response(serializer.data)
+#     def retrieve(self, request, pk=None):
+#         queryset = StreamPlatForm.objects.all()
+#         watchlist = get_object_or_404(queryset, pk=pk)
+#         serializer = StreamPlatFormSerializer(watchlist)
+#         return Response(serializer.data)
+
+
+#     def create(self, request):
+#         serializer = StreamPlatFormSerializer(data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         else:
+#             return Response(serializer.error)
+
+#     def destroy(self, requet, pk=None):
+#         try:
+#             streamPlatForm = StreamPlatForm.objects.get(pk=pk)
+#         except StreamPlatForm.DoesNotExist:
+#             return Response(status = status.HTTP_404_NOT_FOUND)
+#         streamPlatForm.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT) 
+
+class StreamPlatFormAV(viewsets.ReadOnlyModelViewSet):
+    serializer_class = StreamPlatFormSerializer
+    queryset = StreamPlatForm.objects.all()
 
 class StreamPlatFormDetailsAV(APIView):
     def get(self, request, pk):
