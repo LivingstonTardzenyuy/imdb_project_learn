@@ -9,15 +9,23 @@ from rest_framework import generics
 from rest_framework import mixins 
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework.exceptions import ValidationError
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
-    def perform_create(self, serializer):
-        # user_review = self.get_
+    
+    def get_queryset(self):
+        return None
+    def perform_create(self, serializer):              
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk=pk)
-        serializer.save(watchlist = movie)
+        review_user = self.request.user
+
+        #filters the reivew based on review_user and watchlist and check if user has reviewed a review
+        review_queryset = Reviews.objects.filter(review_user=review_user, watchlist = movie)
+        if (review_queryset.exists()):
+            raise ValidationError("You have already reviewed this movie")
+        serializer.save(watchlist = movie, review_user = review_user)
         
 class ReviewList(generics.ListAPIView):
     # queryset = Reviews.objects.all()
