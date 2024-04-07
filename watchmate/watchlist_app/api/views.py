@@ -10,7 +10,7 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
@@ -72,6 +72,7 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
 #         return Response(status=status.HTTP_204_NO_CONTENT) 
 
 class StreamPlatFormAV(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
