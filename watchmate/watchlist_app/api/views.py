@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
     def perform_create(self, serializer):
+        # user_review = self.get_
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk=pk)
         serializer.save(watchlist = movie)
