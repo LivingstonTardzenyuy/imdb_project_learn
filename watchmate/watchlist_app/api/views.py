@@ -61,7 +61,7 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
 #         streamPlatForm.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT) 
 
-class StreamPlatFormAV(viewsets.ReadOnlyModelViewSet):
+class StreamPlatFormAV(viewsets.ModelViewSet):
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
