@@ -10,6 +10,7 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
@@ -102,6 +103,7 @@ class StreamPlatFormDetailsAV(APIView):
         return Response(status = status.HTTP_200_OK)
     
 class WatchListListAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         movie = WatchList.objects.all()
         serializer = WatchListSerializer(movie, many = True)
