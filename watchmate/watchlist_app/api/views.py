@@ -17,7 +17,7 @@ class ReviewCreate(generics.CreateAPIView):
     
     def get_queryset(self):
         return Reviews.objects.all()
-    def perform_create(self, serializer):              
+    def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk=pk)
         review_user = self.request.user
