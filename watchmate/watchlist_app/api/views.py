@@ -11,10 +11,12 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from watchlist_app.api.permissions  import AdminOrReadOnlyPermission, ReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
-    
+    permission_classes = [ReviewUserOrReadOnly]
+
     def get_queryset(self):
         return Reviews.objects.all()
     def perform_create(self, serializer):
@@ -29,6 +31,7 @@ class ReviewCreate(generics.CreateAPIView):
         serializer.save(watchlist = movie, review_user = review_user)
         
 class ReviewList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     # queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
@@ -37,6 +40,7 @@ class ReviewList(generics.ListAPIView):
         return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AdminOrReadOnlyPermission]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
