@@ -9,16 +9,38 @@ from rest_framework import generics
 from rest_framework import mixins 
 from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
-
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from watchlist_app.api.permissions  import AdminOrReadOnlyPermission, ReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
+    permission_classes = [ReviewUserOrReadOnly]
+
+    def get_queryset(self):
+        return Reviews.objects.all()
+    
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk=pk)
-        serializer.save(watchlist = movie)
+        review_user = self.request.user
+
+        #filters the reivew based on review_user and watchlist and check if user has reviewed a review
+        review_queryset = Reviews.objects.filter(review_user=review_user, watchlist = movie)
+        if (review_queryset.exists()):
+            raise ValidationError("You have already reviewed this movie")
+        
+        #Calculating average rating and number of ratings
+        if movie.number_rating == 0:
+            movie.average_rating = serializer.validated_data['rating']
+        else:
+            movie.average_rating = (serializer.validated_data['rating'] + movie.average_rating) /2
+            movie.number_rating  = movie.number_rating +1 
+        movie.save() 
+        serializer.save(watchlist = movie, review_user = review_user)
         
 class ReviewList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     # queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
@@ -27,41 +49,12 @@ class ReviewList(generics.ListAPIView):
         return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AdminOrReadOnlyPermission]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
-
-
-# class StreamPlatFormAV(viewsets.ViewSet):
-#     def list(self, request):
-#         queryset = StreamPlatForm.objects.all()
-#         serializer = StreamPlatFormSerializer(queryset, many = True)
-#         return Response(serializer.data)
-    
-#     def retrieve(self, request, pk=None):
-#         queryset = StreamPlatForm.objects.all()
-#         watchlist = get_object_or_404(queryset, pk=pk)
-#         serializer = StreamPlatFormSerializer(watchlist)
-#         return Response(serializer.data)
-
-
-#     def create(self, request):
-#         serializer = StreamPlatFormSerializer(data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.error)
-
-#     def destroy(self, requet, pk=None):
-#         try:
-#             streamPlatForm = StreamPlatForm.objects.get(pk=pk)
-#         except StreamPlatForm.DoesNotExist:
-#             return Response(status = status.HTTP_404_NOT_FOUND)
-#         streamPlatForm.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT) 
-
-class StreamPlatFormAV(viewsets.ReadOnlyModelViewSet):
+class StreamPlatFormAV(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
@@ -93,6 +86,7 @@ class StreamPlatFormDetailsAV(APIView):
         return Response(status = status.HTTP_200_OK)
     
 class WatchListListAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         movie = WatchList.objects.all()
         serializer = WatchListSerializer(movie, many = True)
