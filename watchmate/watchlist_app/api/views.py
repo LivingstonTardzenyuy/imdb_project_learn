@@ -19,6 +19,7 @@ class ReviewCreate(generics.CreateAPIView):
 
     def get_queryset(self):
         return Reviews.objects.all()
+    
     def perform_create(self, serializer):
         pk = self.kwargs.get('pk')
         movie = WatchList.objects.get(pk=pk)
@@ -28,6 +29,15 @@ class ReviewCreate(generics.CreateAPIView):
         review_queryset = Reviews.objects.filter(review_user=review_user, watchlist = movie)
         if (review_queryset.exists()):
             raise ValidationError("You have already reviewed this movie")
+        
+        #Calculating average rating and number of ratings
+        if movie.number_rating == 0:
+            movie.average_rating = serializer.validated_data['rating']
+            movie.number_rating  = 0 
+        else:
+            movie.average_rating = (serializer.validated_data['rating'] + movie.average_rating) /2
+            movie.number_rating  = serializer.validated_data['rating'] +1 
+        movie.save() 
         serializer.save(watchlist = movie, review_user = review_user)
         
 class ReviewList(generics.ListAPIView):
@@ -44,37 +54,6 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
-
-
-# class StreamPlatFormAV(viewsets.ViewSet):
-#     def list(self, request):
-#         queryset = StreamPlatForm.objects.all()
-#         serializer = StreamPlatFormSerializer(queryset, many = True)
-#         return Response(serializer.data)
-    
-#     def retrieve(self, request, pk=None):
-#         queryset = StreamPlatForm.objects.all()
-#         watchlist = get_object_or_404(queryset, pk=pk)
-#         serializer = StreamPlatFormSerializer(watchlist)
-#         return Response(serializer.data)
-
-
-#     def create(self, request):
-#         serializer = StreamPlatFormSerializer(data = request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.error)
-
-#     def destroy(self, requet, pk=None):
-#         try:
-#             streamPlatForm = StreamPlatForm.objects.get(pk=pk)
-#         except StreamPlatForm.DoesNotExist:
-#             return Response(status = status.HTTP_404_NOT_FOUND)
-#         streamPlatForm.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT) 
-
 class StreamPlatFormAV(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = StreamPlatFormSerializer
