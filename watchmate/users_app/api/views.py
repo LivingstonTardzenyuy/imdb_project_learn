@@ -9,6 +9,7 @@ from users_app.models import *
 def registration_view(request):
     if request.method == 'POST':
         serializer = UserRegistrationSerializer(data=request.data)
+       
         
         data = {}
         if serializer.is_valid():
