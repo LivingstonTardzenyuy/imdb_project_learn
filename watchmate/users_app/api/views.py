@@ -22,3 +22,11 @@ def registration_view(request):
         else:
             data['response'] = serializer.errors
         return Response(data)
+    
+
+@api_view(['POST'],)
+def logout_view(request):
+    if request.method == 'POST':
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_No_Content)
+    
