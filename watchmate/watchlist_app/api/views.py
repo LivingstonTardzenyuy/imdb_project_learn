@@ -11,7 +11,7 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from watchlist_app.api.permissions  import IsAdminOrReadOnlyPermission, IsReviewUserOrReadOnly
+from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -48,17 +48,17 @@ class ReviewList(generics.ListAPIView):
         return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminOrReadOnlyPermission]
+    permission_classes = [IsAdminOrReadOnly]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
 class StreamPlatFormAV(viewsets.ModelViewSet):
-    permission_classes = [IsAdminOrReadOnlyPermission]
+    permission_classes = [IsAdminOrReadOnly]
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
 class StreamPlatFormDetailsAV(APIView):
-    permission_classes = [IsAdminOrReadOnlyPermission]
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
         try:
             streamPlatForm = StreamPlatForm.objects.get(pk=pk)
@@ -96,7 +96,7 @@ class WatchListListAV(APIView):
         serializer = WatchListSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status = status.HTTP_201_CREATED)
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 
