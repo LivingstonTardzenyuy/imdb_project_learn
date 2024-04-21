@@ -38,6 +38,7 @@ class ReviewCreate(generics.CreateAPIView):
             movie.number_rating  = movie.number_rating +1 
         movie.save() 
         serializer.save(watchlist = movie, review_user = review_user)
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
         
 class ReviewList(generics.ListAPIView):
     # queryset = Reviews.objects.all()
@@ -48,7 +49,7 @@ class ReviewList(generics.ListAPIView):
         return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAuthenticated]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
@@ -96,7 +97,7 @@ class WatchListListAV(APIView):
         serializer = WatchListSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
+            return Response(serializer.data,status = status.HTTP_201_CREATED)
         else:
             return Response(status = status.HTTP_400_BAD_REQUEST)
 

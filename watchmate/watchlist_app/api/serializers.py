@@ -17,7 +17,7 @@ class WatchListSerializer(serializers.ModelSerializer):
     def get_len_names(self, object):
         return len(object.name)
 
-        
+
     def validate(self, data):
         if data['name'] == data['description']:
             raise serializers.ValidationError("Title and description should be different")
