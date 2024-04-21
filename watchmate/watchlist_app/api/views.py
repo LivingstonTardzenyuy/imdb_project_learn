@@ -11,7 +11,7 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from watchlist_app.api.permissions  import AdminOrReadOnlyPermission, ReviewUserOrReadOnly
+from watchlist_app.api.permissions  import IsAdminOrReadOnlyPermission, ReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewsSerializer
@@ -101,6 +101,7 @@ class WatchListListAV(APIView):
 
 
 class WatchListDetailsAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
         try:
             movie = WatchList.objects.get(pk=pk)
