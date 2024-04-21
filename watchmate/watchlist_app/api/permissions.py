@@ -10,7 +10,7 @@ class IsAdminOrReadOnlyPermission(permissions.IsAdminUser):
     
     
     #Allowing only users who added a permission to edit it
-class ReviewUserOrReadOnly(permissions.BasePermission):
+class IsReviewUserOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):            #we use has_object_permission when we want to do a particular operation on the object
         if request.method in permissions.SAFE_METHODS:
             return True

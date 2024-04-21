@@ -11,11 +11,12 @@ from rest_framework import viewsets
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from watchlist_app.api.permissions  import IsAdminOrReadOnlyPermission, ReviewUserOrReadOnly
+from watchlist_app.api.permissions  import IsAdminOrReadOnlyPermission, IsReviewUserOrReadOnly
 
 class ReviewCreate(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
-    permission_classes = [ReviewUserOrReadOnly]
+    permission_classes = [IsReviewUserOrReadOnly]
     def get_queryset(self):
         return Reviews.objects.all()
     
@@ -39,7 +40,6 @@ class ReviewCreate(generics.CreateAPIView):
         serializer.save(watchlist = movie, review_user = review_user)
         
 class ReviewList(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
     # queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
@@ -48,16 +48,17 @@ class ReviewList(generics.ListAPIView):
         return Reviews.objects.filter(watchlist=pk)
     
 class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AdminOrReadOnlyPermission]
+    permission_classes = [IsAdminOrReadOnlyPermission]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
     
 class StreamPlatFormAV(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrReadOnlyPermission]
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
 class StreamPlatFormDetailsAV(APIView):
+    permission_classes = [IsAdminOrReadOnlyPermission]
     def get(self, request, pk):
         try:
             streamPlatForm = StreamPlatForm.objects.get(pk=pk)
