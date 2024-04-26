@@ -9,9 +9,10 @@ urlpatterns = [
     path('login/', views.obtain_auth_token),
     path('registration/', registration_view, name='registration'),
     path('logout/', logout_view, name='logout'),
+   
     
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('loginJwt/', registration_viewJwt, name= 'token_login'),
+#     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+#     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+#     path('loginJwt/', registration_viewJwt, name= 'token_login'),
 ]
 
