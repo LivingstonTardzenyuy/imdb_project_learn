@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrReadOnly
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -41,6 +42,7 @@ class ReviewCreate(generics.CreateAPIView):
         return Response(serializer.data, status = status.HTTP_201_CREATED)
         
 class ReviewList(generics.ListAPIView):
+    throttle_classes = [UserRateThrottle]
     # queryset = Reviews.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
