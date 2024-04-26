@@ -12,13 +12,14 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrReadOnly
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
 
 
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
+    throttle_classes = [ReviewCreateThrottle]
     # permission_classes = [IsReviewUserOrReadOnly]
     def get_queryset(self):
         return Reviews.objects.all()
@@ -44,7 +45,7 @@ class ReviewCreate(generics.CreateAPIView):
         return Response(serializer.data, status = status.HTTP_201_CREATED)
         
 class ReviewList(generics.ListAPIView):
-    throttle_classes = [UserRateThrottle]
+    throttle_classes = [ReviewListThrottle]
     # queryset = Reviews.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
@@ -57,7 +58,7 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
-    
+    throttle_classes = [ScopedRateThrottle]
 class StreamPlatFormAV(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = StreamPlatFormSerializer
