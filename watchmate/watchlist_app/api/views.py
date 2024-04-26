@@ -13,6 +13,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
+
 
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
