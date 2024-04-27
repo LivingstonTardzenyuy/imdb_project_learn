@@ -17,11 +17,16 @@ from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewsSerializer
+    # def get_queryset(self):
+    #     username = self.kwargs.get('username')
+    #     # movie = WatchList.objects.get(pk=pk)
+    #     return Reviews.objects.filter(review_user__username = username)
     def get_queryset(self):
-        username = self.kwargs.get('username')
-        # movie = WatchList.objects.get(pk=pk)
-        return Reviews.objects.filter(review_user__username = username)
-
+        queryset = Reviews.objects.all()
+        username = self.request.query_params.get('username')
+        if username is not None:
+            queryset = queryset.filter(review_user__username = username)
+        return queryset
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
