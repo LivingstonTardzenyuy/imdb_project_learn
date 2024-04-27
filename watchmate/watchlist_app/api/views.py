@@ -15,7 +15,7 @@ from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrRead
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import filters
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewsSerializer
@@ -108,6 +108,15 @@ class StreamPlatFormDetailsAV(APIView):
             return Response(status = status.HTTP_404_NOT_FOUND) 
         streamPlatForm.delete()
         return Response(status = status.HTTP_200_OK)
+
+
+class WatchList(generics.ListAPIView):
+    queryset = WatchList.objects.all()
+    serializer_class = WatchListSerializer
+    # filter_backends = [DjangoFilterBackend]
+    # filter_fields = ['name', 'platForm__name']    
+    filter_backends = [filters.OrderingFilter]
+    search_fields = ['^name', 'average_rating']
     
 class WatchListListAV(APIView):
     permission_classes = [IsAuthenticated]
