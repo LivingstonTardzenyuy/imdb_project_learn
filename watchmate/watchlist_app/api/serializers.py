@@ -10,7 +10,8 @@ class ReviewsSerializer(serializers.ModelSerializer):
     
 class WatchListSerializer(serializers.ModelSerializer):
     len_names = serializers.SerializerMethodField()  #adding a new field without specifying in models.
-    reviews = ReviewsSerializer(many = True, read_only = True)
+    # reviews = ReviewsSerializer(many = True, read_only = True)
+    platForm = serializers.CharField(source = 'platForm.name')
     class Meta:
         model = WatchList 
         fields = '__all__'       

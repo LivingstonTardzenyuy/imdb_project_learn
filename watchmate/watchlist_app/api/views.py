@@ -110,7 +110,7 @@ class StreamPlatFormDetailsAV(APIView):
         return Response(status = status.HTTP_200_OK)
 
 
-class WatchList(generics.ListAPIView):
+class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
     # filter_backends = [DjangoFilterBackend]
