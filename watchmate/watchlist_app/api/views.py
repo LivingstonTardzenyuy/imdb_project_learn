@@ -13,6 +13,12 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from watchlist_app.api.permissions  import IsAdminOrReadOnly, IsReviewUserOrReadOnly
 
+
+class UserReview(generics.ListAPIView):
+    serializer_class = ReviewsSerializer
+    def get_queryset(self):
+        pk = self.request.get('pk')
+        return Reviews.objects.filter(review_user = pk)
 class ReviewCreate(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ReviewsSerializer
