@@ -16,6 +16,7 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, Scoped
 from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from watchlist_app.api.paginations import WatchListPagination
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewsSerializer
@@ -118,22 +119,35 @@ class WatchListGV(generics.ListAPIView):
     filter_backends = [filters.OrderingFilter]
     search_fields = ['^name', 'average_rating']
     
-class WatchListListAV(APIView):
-    # permission_classes = [IsAuthenticated]
-    def get(self, request):
+# class WatchListListAV(APIView):
+#     permission_classes = [IsAuthenticated]
+#     pagination_class = WatchListPagination
+#     def get(self, request):
+#         movie = WatchList.objects.all()
+#         serializer = WatchListSerializer(movie, many = True)
+#         return Response(serializer.data)
+    
+#     def post(self, request):
+#         serializer = WatchListSerializer(data = request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data,status = status.HTTP_201_CREATED)
+#         else:
+#             return Response(status = status.HTTP_400_BAD_REQUEST)
+
+class WatchListListAV(viewsets.ViewSet):
+    pagination_class = WatchListPagination
+    def list(self, request):
         movie = WatchList.objects.all()
         serializer = WatchListSerializer(movie, many = True)
         return Response(serializer.data)
-    
-    def post(self, request):
+    def create(self, request):
         serializer = WatchListSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status = status.HTTP_201_CREATED)
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response(status = status.HTTP_400_BAD_REQUEST)
-
-
 class WatchListDetailsAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
