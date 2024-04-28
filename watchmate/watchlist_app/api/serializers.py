@@ -7,11 +7,16 @@ class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews 
         exclude = ('watchlist',)
-    
+
+
+
+
+
 class WatchListSerializer(serializers.ModelSerializer):
     len_names = serializers.SerializerMethodField()  #adding a new field without specifying in models.
     # reviews = ReviewsSerializer(many = True, read_only = True)
-    platForm = serializers.CharField(source = 'platForm.name')
+    # platForm = serializers.CharField(source = 'platForm.name', read_only=True)
+    # platForm = StreamPlatFormSerializer(write_only=True)
     class Meta:
         model = WatchList 
         fields = '__all__'       
@@ -24,7 +29,9 @@ class WatchListSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title and description should be different")
         else:
             return data 
-        
+            
+    
+
 class StreamPlatFormSerializer(serializers.ModelSerializer):
     watchlist = WatchListSerializer(many = True, read_only = True)  
     class Meta:
@@ -37,4 +44,3 @@ class StreamPlatFormSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Both fields should be different")
             else:
                 return data 
-

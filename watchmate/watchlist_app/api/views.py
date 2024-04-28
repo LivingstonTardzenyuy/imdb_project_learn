@@ -119,7 +119,7 @@ class WatchListGV(generics.ListAPIView):
     search_fields = ['^name', 'average_rating']
     
 class WatchListListAV(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     def get(self, request):
         movie = WatchList.objects.all()
         serializer = WatchListSerializer(movie, many = True)
