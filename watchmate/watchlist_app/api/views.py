@@ -114,6 +114,7 @@ class StreamPlatFormDetailsAV(APIView):
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
+    pagination_class = WatchListPagination
     # filter_backends = [DjangoFilterBackend]
     # filter_fields = ['name', 'platForm__name']    
     filter_backends = [filters.OrderingFilter]
