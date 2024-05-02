@@ -16,7 +16,7 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, Scoped
 from watchlist_app.api.throttle import ReviewListThrottle, ReviewCreateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from watchlist_app.api.paginations import WatchListPagination, WatchListLimitOffsetPagination
+from watchlist_app.api.paginations import WatchListPagination, WatchListLimitOffsetPagination, WatchListCurserPagination
 
 class UserReview(generics.ListAPIView):
     serializer_class = ReviewsSerializer
@@ -114,7 +114,7 @@ class StreamPlatFormDetailsAV(APIView):
 class WatchListGV(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
-    pagination_class = WatchListLimitOffsetPagination
+    pagination_class = WatchListCurserPagination
     # filter_backends = [DjangoFilterBackend]
     # filter_fields = ['name', 'platForm__name']    
     filter_backends = [filters.OrderingFilter]
