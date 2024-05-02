@@ -23,7 +23,7 @@ def registration_view(request):
             # return Response(data, status=status.HTTP_201_CREATED) q 
         else:
             data['response'] = serializer.errors
-        return Response(data)
+        return Response(data, status = status.HTTP_201_CREATED)
     
     
     
@@ -46,7 +46,7 @@ def registration_viewJwt(request):
         data['response'] = serializer.errors
         # return Response(data, status = status.HTTP_400_BAD_REQUEST)
     
-    return Response(data)
+    return Response(data, status = status.HTTP_201_CREATED)
     
     
     
