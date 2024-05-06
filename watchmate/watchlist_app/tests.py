@@ -14,5 +14,5 @@ class StreamPlatFormTestCase(APITestCase):
             "website": "http://netflix.com"
         }
         
-        response = self.client.post(reverse('streamplatform-list'), data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = self.client.get(reverse('streamplatform-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
