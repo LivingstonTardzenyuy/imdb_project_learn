@@ -79,6 +79,7 @@ class ReviewDetails(generics.RetrieveUpdateDestroyAPIView):
     throttle_classes = [ScopedRateThrottle]
 class StreamPlatFormAV(viewsets.ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
+    # permission_classes = [AllowAny]
     serializer_class = StreamPlatFormSerializer
     queryset = StreamPlatForm.objects.all()
 
